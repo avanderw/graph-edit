@@ -1,0 +1,19 @@
+{
+  "name": "graph-edit",
+  "version": "0.1.0",
+  "description": "Graph-based economy simulation editor with node-based interactions",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test": "node --test src/stores.test.js",
+    "preview": "vite preview",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.1.0",
+    "svelte": "^4.2.0",
+    "vite": "^5.1.0"
+  },
+  "dependencies": {}
+}
