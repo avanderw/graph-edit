@@ -83,7 +83,7 @@
         patternUnits="userSpaceOnUse"
         patternTransform="translate({$ui.panX} {$ui.panY}) scale({$ui.zoom})"
       >
-        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#2a3f5f" stroke-width="0.5" />
+        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--editor-grid)" stroke-width="0.5" />
       </pattern>
     </defs>
     <rect width="100%" height="100%" fill="url(#grid)" />
@@ -101,7 +101,7 @@
           y1={$ui.draggingConnection.fromY}
           x2={$ui.draggingConnection.toX}
           y2={$ui.draggingConnection.toY}
-          stroke="#888"
+          stroke="var(--color-muted)"
           stroke-width="2"
           stroke-dasharray="5,5"
           pointer-events="none"
@@ -139,11 +139,14 @@
   .canvas {
     width: 100%;
     height: 100%;
-    background: #0a0e27;
+    background: var(--editor-canvas);
     overflow: hidden;
     position: relative;
     cursor: grab;
     user-select: none;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
   }
 
   .canvas:active {
@@ -186,20 +189,22 @@
     flex-direction: column;
     gap: 8px;
     font-size: 12px;
-    color: #666;
-    background: rgba(0, 0, 0, 0.3);
+    color: var(--color-muted);
+    background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+    border: 1px solid var(--color-border);
     padding: 12px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     max-width: 400px;
   }
 
   .zoom-info {
     font-weight: 600;
-    color: #aaa;
+    color: var(--color-text);
+    font-family: var(--font-mono);
   }
 
   .hint {
     font-size: 11px;
-    color: #555;
+    color: var(--color-muted);
   }
 </style>

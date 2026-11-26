@@ -1,6 +1,8 @@
 <script>
   import { onMount, tick } from 'svelte'
   import Canvas from './components/Canvas.svelte'
+  import SiteChrome from './components/SiteChrome.svelte'
+  import { Upload, Settings2, Download } from 'lucide-svelte'
   import { graph, addNode, advanceSimulation } from './stores.js'
 
   let simulationRunning = true
@@ -56,6 +58,7 @@
 </script>
 
 <div class="app">
+  <SiteChrome />
   <header class="header">
     <h1>Graph Edit</h1>
     <p class="subtitle">Economy Simulation Node Editor</p>
@@ -68,15 +71,15 @@
       <div class="panel-section">
         <h2>Add Node</h2>
         <button on:click={addSourceNode} class="node-btn source">
-          <span class="icon">◉</span>
+          <Upload size={17} aria-hidden="true" />
           Source
         </button>
         <button on:click={addProcessNode} class="node-btn process">
-          <span class="icon">⬚</span>
+          <Settings2 size={17} aria-hidden="true" />
           Process
         </button>
         <button on:click={addSinkNode} class="node-btn sink">
-          <span class="icon">▶</span>
+          <Download size={17} aria-hidden="true" />
           Sink
         </button>
       </div>
@@ -114,6 +117,11 @@
     </aside>
   </div>
 
+  <details class="site-contact">
+    <summary>Contact &amp; site information</summary>
+    <SiteChrome kind="footer" />
+  </details>
+
   <dialog class="process-dialog" bind:this={nodeDialog} aria-labelledby="node-dialog-title">
     <form on:submit|preventDefault={createConfiguredNode}>
       <h2 id="node-dialog-title">New {creationType} node</h2>
@@ -143,40 +151,48 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
-    background: #0a0e27;
+    min-height: 0;
+    background: var(--color-bg);
   }
 
   .header {
-    background: linear-gradient(135deg, #1a1f3a 0%, #2a3f5f 100%);
-    padding: 16px 24px;
-    border-bottom: 1px solid #3a4f6f;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    flex-shrink: 0;
+    background: var(--color-bg);
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--color-border);
   }
 
   h1 {
     font-size: 24px;
-    font-weight: 700;
+    font-weight: 400;
     margin: 0;
-    color: #fff;
-    letter-spacing: -0.5px;
+    color: var(--color-text);
+    letter-spacing: 0;
   }
 
   .subtitle {
     font-size: 13px;
-    color: #888;
-    margin: 4px 0 0 0;
+    color: var(--color-muted);
+    margin: 0;
+    font-style: italic;
   }
 
   .main {
     display: flex;
     flex: 1;
     overflow: hidden;
+    min-height: 0;
+    min-width: 0;
   }
 
   .panel {
-    width: 240px;
-    background: #141829;
-    border-left: 1px solid #2a3f5f;
+    flex: 0 0 232px;
+    background: var(--color-surface);
+    border-left: 1px solid var(--color-border);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -184,16 +200,16 @@
 
   .panel-section {
     padding: 16px;
-    border-bottom: 1px solid #2a3f5f;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .panel-section h2 {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #666;
+    font-size: 17px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--color-text);
     margin: 0 0 12px 0;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
   }
 
   .node-btn {
@@ -204,37 +220,47 @@
     padding: 10px 12px;
     margin-bottom: 8px;
     border: 1px solid;
-    background: rgba(255, 255, 255, 0.05);
-    color: #e0e0e0;
-    border-radius: 6px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-    transition: all 0.2s;
+    font-size: 15px;
+    font-weight: 400;
+    transition: background var(--transition-fast), border-color var(--transition-fast);
   }
 
   .node-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-1px);
+    background: var(--code-bg);
   }
 
   .node-btn.source {
-    border-color: #10b981;
-    color: #10b981;
+    border-color: var(--editor-source);
+    color: var(--editor-source);
   }
 
   .node-btn.process {
-    border-color: #3b82f6;
-    color: #3b82f6;
+    border-color: var(--editor-process);
+    color: var(--editor-process);
   }
 
   .node-btn.sink {
-    border-color: #f59e0b;
-    color: #f59e0b;
+    border-color: var(--editor-sink);
+    color: var(--editor-sink);
   }
 
-  .icon {
-    font-size: 14px;
+  .site-contact {
+    flex-shrink: 0;
+    max-height: 35vh;
+    overflow: auto;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg);
+  }
+
+  .site-contact summary {
+    padding: 6px 24px;
+    color: var(--color-muted);
+    font-size: 12px;
+    cursor: pointer;
   }
 
   .process-dialog {
@@ -243,10 +269,11 @@
     max-height: calc(100% - 32px);
     overflow: auto;
     padding: 24px;
-    border: 1px solid #3a4f6f;
-    border-radius: 8px;
-    background: #141829;
-    color: #eee;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-md);
   }
 
   .process-dialog::backdrop {
@@ -261,6 +288,7 @@
   .process-dialog h2 {
     margin: 0;
     font-size: 18px;
+    font-weight: 400;
     overflow-wrap: anywhere;
   }
 
@@ -276,10 +304,10 @@
     width: 64px;
     min-width: 0;
     padding: 8px;
-    border: 1px solid #3a4f6f;
-    border-radius: 4px;
-    background: #0a0e27;
-    color: #eee;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--code-bg);
+    color: var(--color-text);
     font: inherit;
   }
 
@@ -292,25 +320,26 @@
 
   .dialog-actions button {
     padding: 8px 12px;
-    border: 1px solid #3a4f6f;
-    border-radius: 4px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     background: transparent;
-    color: #eee;
+    color: var(--color-text);
     font: inherit;
     font-size: 13px;
     cursor: pointer;
   }
 
   .dialog-actions .create-process {
-    background: #2563eb;
-    border-color: #3b82f6;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-accent-contrast);
   }
 
   .info-item {
     display: flex;
     justify-content: space-between;
     font-size: 13px;
-    color: #888;
+    color: var(--color-muted);
     margin-bottom: 8px;
   }
 
@@ -318,13 +347,14 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #ddd;
+    color: var(--color-text);
     font-size: 13px;
   }
 
   .info-item strong {
-    color: #e0e0e0;
-    font-weight: 600;
+    color: var(--color-text);
+    font-family: var(--font-mono);
+    font-weight: 400;
   }
 
   .shortcuts {
@@ -335,7 +365,7 @@
   }
 
   .shortcuts li {
-    color: #666;
+    color: var(--color-muted);
     margin-bottom: 6px;
     display: flex;
     align-items: center;
@@ -343,18 +373,52 @@
   }
 
   kbd {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid #3a4f6f;
+    background: var(--code-bg);
+    border: 1px solid var(--color-border);
     padding: 2px 6px;
     border-radius: 3px;
-    font-family: 'Monaco', 'Menlo', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: #aaa;
+    color: var(--color-muted);
   }
 
   @media (max-width: 768px) {
+    .header {
+      padding: 8px 12px;
+    }
+
+    .main {
+      flex-direction: column-reverse;
+    }
+
     .panel {
+      flex: 0 0 auto;
+      max-height: 160px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      border-left: 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .panel-section {
+      padding: 10px 12px;
+    }
+
+    .panel-section:first-child {
+      grid-row: span 2;
+    }
+
+    .panel-section:last-child {
       display: none;
+    }
+
+    .panel-section h2 {
+      margin-bottom: 6px;
+    }
+
+    .node-btn {
+      padding: 4px 8px;
+      margin-bottom: 4px;
     }
   }
 </style>

@@ -1,0 +1,141 @@
+@font-face {
+  font-family: 'et-book';
+  src: url('https://avanderw.co.za/fonts/et-book-roman.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'et-book';
+  src: url('https://avanderw.co.za/fonts/et-book-italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'et-book';
+  src: url('https://avanderw.co.za/fonts/et-book-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light dark;
+  font-family: et-book, Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --font-serif: et-book, Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --color-bg: light-dark(#ffffff, #1b1f1f);
+  --color-surface: light-dark(#ffffff, #232829);
+  --color-text: light-dark(#1e1e1e, #e6e8e7);
+  --color-muted: light-dark(#6a6a6a, #9aa3a1);
+  --color-border: light-dark(#e0e0e0, #3a4140);
+  --color-accent: light-dark(#2a7f66, #5cbda0);
+  --color-accent-hover: light-dark(#236b55, #6fcbb0);
+  --color-accent-contrast: light-dark(#ffffff, #0f1412);
+  --code-bg: light-dark(#f4f6f4, #151918);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --shadow-sm: 0 2px 4px rgb(0 0 0 / 5%);
+  --shadow-md: 0 8px 16px rgb(0 0 0 / 10%);
+  --transition-fast: 0.15s ease;
+  --editor-canvas: light-dark(#f8faf8, #191d1c);
+  --editor-grid: light-dark(#d0d9d3, #353f3a);
+  --editor-source: light-dark(#2a7f66, #5cbda0);
+  --editor-process: light-dark(#366682, #80b6ce);
+  --editor-sink: light-dark(#936025, #d8b078);
+  --editor-danger: light-dark(#b33c45, #f19aa1);
+  --editor-warning: light-dark(#875a15, #e4bd70);
+  --editor-focus: color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  overflow: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-serif);
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+input[type='checkbox'] {
+  accent-color: var(--color-accent);
+}
+
+input[type='number'] {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+site-header,
+site-footer {
+  display: block;
+}
+
+site-header:not(:defined),
+site-footer:not(:defined) {
+  min-height: 56px;
+}
+
+site-header:not(:defined) {
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

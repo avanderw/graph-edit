@@ -1,4 +1,5 @@
 <script>
+  import { X } from 'lucide-svelte'
   import { selectNode, setDraggingNode, updateNodePosition, deleteNode, startConnectionDrag, updateConnectionDragPreview, addConnection, removeConnection, updateNodeName, updateNodeInterval, updatePortInventory, updatePortCapacity, updateRecipeQuantity, getRecipeQuantity, getSupplyLimitedCycleRate, getInputPorts, getOutputPorts, inventoryTrendPeriodMs, graph, ui } from '../stores.js'
 
   export let node
@@ -163,10 +164,10 @@
   }
 
   $: nodeTypeColor = {
-    'source': '#10b981',
-    'process': '#3b82f6',
-    'sink': '#f59e0b'
-  }[node.type] || '#6366f1'
+    'source': 'var(--editor-source)',
+    'process': 'var(--editor-process)',
+    'sink': 'var(--editor-sink)'
+  }[node.type] || 'var(--color-accent)'
   $: ready = getInputPorts(node).every(port => node.inventory.inputs[port.id] >= getRecipeQuantity(node, 'inputs', port.id))
   $: outputFull = getOutputPorts(node).some(port => node.capacity.outputs[port.id] - node.inventory.outputs[port.id] < getRecipeQuantity(node, 'outputs', port.id))
   $: operation = { source: 'Generating', process: 'Processing', sink: 'Consuming' }[node.type]
@@ -185,18 +186,19 @@
     top: {node.y}px;
     width: {node.width}px;
     min-height: {node.height}px;
+    --node-color: {nodeTypeColor};
     border-color: {nodeTypeColor};
   "
   on:mousedown={handleMouseDown}
   role="button"
   tabindex="0"
 >
-  <div class="node-header" style="background-color: {nodeTypeColor}">
+  <div class="node-header">
     <div class="node-heading">
       <span class="node-kind">{node.type}{#if node.type === 'process'} · {getInputPorts(node).length} inputs / {getOutputPorts(node).length} outputs{:else if node.type === 'source'} · {getOutputPorts(node).length} outputs{:else} · {getInputPorts(node).length} inputs{/if}</span>
       <input class="node-name" aria-label="Node name" maxlength="80" value={node.name} on:change={handleNameChange} />
     </div>
-    <button class="delete-btn" on:click={handleDelete} title="Delete node">×</button>
+    <button class="delete-btn" on:click={handleDelete} title="Delete node" aria-label="Delete {node.name}"><X size={16} aria-hidden="true" /></button>
   </div>
 
   <div class="node-content">
@@ -358,15 +360,15 @@
 <style>
   .node {
     position: absolute;
-    background: #1a1f3a;
+    background: var(--color-surface);
     border: 2px solid;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     cursor: grab;
     user-select: none;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    transition: box-shadow 0.2s;
+    box-shadow: var(--shadow-md);
+    transition: box-shadow var(--transition-fast);
     height: auto;
   }
 
@@ -378,11 +380,11 @@
   }
 
   .node:hover {
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 10px 24px rgb(0 0 0 / 14%);
   }
 
   .node.selected {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 15px 40px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 0 3px var(--editor-focus), var(--shadow-md);
   }
 
   .node-header {
@@ -390,8 +392,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    border-radius: 6px 6px 0 0;
-    font-weight: 600;
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--node-color) 9%, var(--color-surface));
+    font-weight: 400;
     font-size: 14px;
     cursor: grab;
   }
@@ -403,10 +407,10 @@
 
   .node-kind {
     display: block;
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0;
-    opacity: 0.8;
+    color: var(--node-color);
   }
 
   .node-name {
@@ -416,30 +420,35 @@
     background: transparent;
     border: 1px solid transparent;
     border-radius: 3px;
-    color: white;
+    color: var(--color-text);
     font: inherit;
+    font-size: 16px;
     padding: 2px 3px;
   }
 
   .node-name:hover,
   .node-name:focus {
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(0, 0, 0, 0.15);
+    border-color: var(--color-border);
+    background: var(--color-bg);
   }
 
   .delete-btn {
     background: none;
     border: none;
-    color: white;
-    font-size: 20px;
+    color: var(--color-muted);
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
     cursor: pointer;
-    padding: 0 4px;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+    padding: 0;
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-fast), background var(--transition-fast);
   }
 
   .delete-btn:hover {
-    opacity: 1;
+    color: var(--editor-danger);
+    background: var(--code-bg);
   }
 
   .node-content {
@@ -462,9 +471,9 @@
   .section-label {
     font-size: 11px;
     font-weight: 600;
-    color: #888;
+    color: var(--color-muted);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
   }
 
   .io-list {
@@ -478,7 +487,7 @@
     align-items: center;
     gap: 4px;
     padding: 2px 0;
-    color: #aaa;
+    color: var(--color-text);
   }
 
   .io-port {
@@ -491,7 +500,7 @@
     flex-shrink: 0;
     padding: 0;
     border: none;
-    color: inherit;
+    color: var(--node-color);
   }
 
   .io-port:hover {
@@ -529,11 +538,12 @@
     width: 54px;
     min-width: 0;
     padding: 3px;
-    background: #0a0e27;
-    border: 1px solid #3a4f6f;
+    background: var(--code-bg);
+    border: 1px solid var(--color-border);
     border-radius: 3px;
-    color: #eee;
+    color: var(--color-text);
     font: inherit;
+    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
 
@@ -554,14 +564,14 @@
 
   .port-full {
     display: block;
-    color: #fbbf24;
+    color: var(--editor-warning);
     font-size: 10px;
     line-height: 12px;
   }
 
   .flow-rates {
     display: block;
-    color: #a8c8d4;
+    color: var(--color-muted);
     font-size: 9px;
     line-height: 11px;
     font-variant-numeric: tabular-nums;
@@ -572,9 +582,9 @@
   }
 
   .performance {
-    border-top: 1px solid #3a4f6f;
+    border-top: 1px solid var(--color-border);
     padding: 10px 12px 12px;
-    color: #aaa;
+    color: var(--color-muted);
     font-size: 11px;
     font-variant-numeric: tabular-nums;
   }
@@ -587,7 +597,7 @@
   }
 
   .performance-header {
-    color: #ddd;
+    color: var(--color-text);
   }
 
   .performance dl {
@@ -599,12 +609,13 @@
 
   .performance dd {
     margin: 2px 0 0;
-    color: #eee;
+    color: var(--color-text);
     font-size: 14px;
+    font-family: var(--font-mono);
   }
 
   .performance .busy-value {
-    color: #4ade80;
+    color: var(--color-accent);
   }
 
   .performance-footer {
@@ -630,7 +641,7 @@
 
   .supply-limit {
     margin-top: 5px;
-    color: #a8c8d4;
+    color: var(--editor-process);
   }
 
   .process-recipe {
@@ -642,25 +653,25 @@
     font-size: 9px;
     line-height: 10px;
     text-transform: capitalize;
-    color: #8993a9;
+    color: var(--color-muted);
   }
 
   .inventory-trend.increasing {
-    color: #4ade80;
+    color: var(--color-accent);
   }
 
   .inventory-trend.decreasing {
-    color: #fb7185;
+    color: var(--editor-danger);
   }
 
   .inventory-trend.stable {
-    color: #b8c0d4;
+    color: var(--color-muted);
   }
 
   .node-timer {
     padding: 0 12px 12px;
     font-size: 11px;
-    color: #aaa;
+    color: var(--color-muted);
   }
 
   .timer-control {

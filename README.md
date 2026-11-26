@@ -38,6 +38,12 @@ npm test
 
 The dev server will open at `http://localhost:5173`
 
+## Design System
+
+The editor uses the published [avanderw web components](https://avanderw.co.za/design-system), ET Book typography, and matching light/dark color tokens. The shared header controls the editor theme; the contact footer is available through the bottom disclosure. No local website checkout is required at build time or runtime.
+
+See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) for the integration boundaries, deployment behavior, upstream modularity recommendations, dependency caveats, and browser verification.
+
 ## Usage
 
 ### Keyboard & Mouse

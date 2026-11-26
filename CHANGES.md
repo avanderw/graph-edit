@@ -1,5 +1,14 @@
 # Interactive Connection Drawing - Implementation Summary
 
+## avanderw Design-System Integration - 2026-10-19
+
+- Integrated the published `site-header` and `site-footer` web components from the public HTTPS bundle, without local website dependencies.
+- Added a portable theme adapter using the site's ET Book typography, semantic light/dark tokens, and sea-green accent; restyled nodes, grid, links, dialogs, controls, and performance metrics.
+- Isolated cross-origin navigation compatibility in `SiteChrome.svelte`. Root-relative links from the shared components resolve to the main site, including dynamically created mobile links.
+- Added shared-theme initialization, loading fallbacks, reduced-motion support, Lucide icons, and usable mobile creation controls. The contact footer is collapsed to preserve canvas space.
+- Build asset paths are relative for GitHub Pages project/subdirectory deployment.
+- See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) for verified behavior, the upstream theme/navigation/versioning recommendations, and dependency compatibility notes.
+
 ## Viewport Grid and Connection Rendering - 2026-10-19
 
 - Grid and connection SVG surfaces now cover the canvas viewport instead of moving or scaling a finite drawing rectangle out of view.

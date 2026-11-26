@@ -66,14 +66,14 @@
     {y1}
     {x2}
     {y2}
-    stroke="#4ade80"
+    stroke="var(--color-accent)"
     stroke-width="2.5"
     pointer-events="none"
     stroke-linecap="round"
   />
   <!-- Connection dots at endpoints -->
-  <circle cx={x1} cy={y1} r="5" fill="#4ade80" pointer-events="none" />
-  <circle cx={x2} cy={y2} r="5" fill="#4ade80" pointer-events="none" />
+  <circle cx={x1} cy={y1} r="5" fill="var(--color-accent)" pointer-events="none" />
+  <circle cx={x2} cy={y2} r="5" fill="var(--color-accent)" pointer-events="none" />
 {/if}
 
 <style>
